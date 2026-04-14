@@ -24,8 +24,14 @@ CPMAddPackage(
     VERSION 2.5.0
 )
 
+CPMAddPackage(
+    NAME nlohmann_json
+    GIT_REPOSITORY "https://github.com/nlohmann/json.git"
+    VERSION 3.12.0
+)
+
 # Link Libraries
-target_link_libraries(${TARGET} PRIVATE CLI11::CLI11)
+target_link_libraries(${TARGET} PRIVATE CLI11::CLI11 nlohmann_json::nlohmann_json)
 
 # target_link_libraries(${TEST_TARGET} PRIVATE GTest::GTest GTest::Main)
 # target_link_libraries(${TEST_TARGET} PRIVATE cpuid CLI11::CLI11)
