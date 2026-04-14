@@ -46,7 +46,26 @@ bool Parser::parse(const std::string& filename) {
     // Check JSON contains 'edge' field
     if (data.contains("edge") && data["edge"].is_array()) {
         for (const auto& item : data["edge"]) {
-            // Parse edges
+            Edge edge;
+
+            edge.id = item.value("id", -1);
+            
+            // Check 'vertices' field
+            if (item.contains("vertices") && item["vertices"].is_array()) {
+                const auto& verts = item["vertices"];
+                if (verts.size() == 2) {
+                    edge.from = verts[0].get<int>();
+                    edge.to   = verts[1].get<int>();
+                } else {
+                    std::cerr << "Error: vertices size is not 2\n";
+                    return false;
+                }
+            } else {
+                std::cerr << "Error: 'vertices' field is not exist or is not array!\n";
+                return false;
+            }
+
+            Edges.push_back(edge);
         }
     } else {
         std::cerr << "Error JSON doesn't contain 'edge' field!\n";
@@ -62,6 +81,12 @@ bool Parser::parse(const std::string& filename) {
                   << ", тип='" << node.type << "'" << std::endl;
     }
 
+    // Вывод загруженных рёбер
+    std::cout << "\n=== Рёбра (" << Edges.size() << ") ===" << std::endl;
+    for (const auto& edge : Edges) {
+        std::cout << "ID=" << edge.id
+                  << " | соединяет узлы: " << edge.from << " -> " << edge.to << std::endl;
+    }
 
     return true;
 }

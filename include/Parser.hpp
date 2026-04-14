@@ -12,8 +12,9 @@ public:
         std::string type;
     };
     struct Edge {
-        int id_0;
-        int id_1;
+        int id;
+        int from;
+        int to;
     };
 private:
     std::vector<Node> Nodes;
