@@ -72,21 +72,21 @@ bool Parser::parse(const std::string& filename) {
         return false;
     }
 
-    // Выводим загруженные узлы для проверки
-    std::cout << "Загружено узлов: " << Nodes.size() << std::endl;
-    for (const auto& node : Nodes) {
-        std::cout << "Узел ID=" << node.id
-                  << ", имя='" << node.name << "'"
-                  << ", координаты=(" << node.x << ", " << node.y << ")"
-                  << ", тип='" << node.type << "'" << std::endl;
-    }
+    // // Выводим загруженные узлы для проверки
+    // std::cout << "Загружено узлов: " << Nodes.size() << std::endl;
+    // for (const auto& node : Nodes) {
+    //     std::cout << "Узел ID=" << node.id
+    //               << ", имя='" << node.name << "'"
+    //               << ", координаты=(" << node.x << ", " << node.y << ")"
+    //               << ", тип='" << node.type << "'" << std::endl;
+    // }
 
-    // Вывод загруженных рёбер
-    std::cout << "\n=== Рёбра (" << Edges.size() << ") ===" << std::endl;
-    for (const auto& edge : Edges) {
-        std::cout << "ID=" << edge.id
-                  << " | соединяет узлы: " << edge.from << " -> " << edge.to << std::endl;
-    }
+    // // Вывод загруженных рёбер
+    // std::cout << "\n=== Рёбра (" << Edges.size() << ") ===" << std::endl;
+    // for (const auto& edge : Edges) {
+    //     std::cout << "ID=" << edge.id
+    //               << " | соединяет узлы: " << edge.from << " -> " << edge.to << std::endl;
+    // }
 
     return true;
 }
