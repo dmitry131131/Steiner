@@ -30,6 +30,8 @@ CPMAddPackage(
     VERSION 3.12.0
 )
 
+set(CMAKE_CXX_STANDARD 23)
+
 # Link Libraries
 target_link_libraries(${TARGET} PRIVATE CLI11::CLI11 nlohmann_json::nlohmann_json)
 
