@@ -16,7 +16,6 @@ add_executable(${TARGET})
 # Install dependencies
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake) 
 
-find_package(GTest REQUIRED)    # TODO Fix to CPM code
 
 CPMAddPackage(
     NAME CLI11
@@ -42,21 +41,12 @@ target_link_libraries(${TARGET} PRIVATE CLI11::CLI11 nlohmann_json::nlohmann_jso
 target_include_directories(${TARGET} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # target_include_directories(${TEST_TARGET} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Compile options
-target_compile_options(${TARGET} PUBLIC
-    -Wall 
-    -Wextra 
-    $<$<CONFIG:DEBUG>:-g -fsanitize=address>
-    $<$<CONFIG:RELEASE>:-O3>
-)
-
 # Link options
 target_link_options(${TARGET} PRIVATE -lpthread -lstdc++fs
     $<$<CONFIG:DEBUG>: -fsanitize=address>
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 set_target_properties(${TARGET}
                       PROPERTIES

@@ -39,7 +39,7 @@ struct Edge final {
 };
 
 struct ManhattanMetric final {
-    static constexpr int calculate(const Point& a, const Point& b) {
+    static int calculate(const Point& a, const Point& b) {
         return std::abs(a.x_ - b.x_) + std::abs(a.y_ - b.y_);
     }
 };

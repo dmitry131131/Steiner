@@ -1,32 +1,3 @@
-# Steiner algorithm implementation
-
-## Конфигурация Release сборки
-Конфигурации для `Release` и `Debug` сборок должны находится в разных поддиректориях.
-
-```bash
-    cmake -G "Unix Makefiles" -S . -B build/Release -DCMAKE_BUILD_TYPE=Release
-```
-
-## Конфигурация Debug сборки
-
-```bash
-    cmake -G "Unix Makefiles" -S . -B build/Debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
-```
-
-## Сборка с нуля
-
-`--verbose` - для полного вывода всех исполняемых команд
-`--clean-first` - для чистой сборки из исходников
-
-```bash
-    cmake --build build/Release/ -j20 --verbose --clean-first
-```
-
-
-
-
-
-
 # Реализация алгоритма 1-Steiner
 
 Данная работа посвящена реализации и оптимизации алгоритма 1-Steiner построения дерева Штейнера для заданного множества точек на плоскости. Программа принимает набор исходных координат и генерирует граф с добавленными точками Штейнера, минимизируя суммарную стоимость связей.
@@ -60,8 +31,9 @@ cmake --build build/Release/
 git clone <repository-url>
 cd <project-directory>
 mkdir build
+cd ./build
 cmake .. -G "Visual Studio 18 2026" -A x64
-cmake --build build/Release/
+cmake --build . --config Release
 ```
 
 (Пример сборки для Visual Studio 18 2026 и x86_64)
