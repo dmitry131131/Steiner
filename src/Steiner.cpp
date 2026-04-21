@@ -1,6 +1,8 @@
 #include <iostream>
-#include "Steiner.hpp"
 #include <nlohmann/json.hpp>
+#include <thread>
+#include "BS_thread_pool.hpp"
+#include "Steiner.hpp"
 
 void Steiner::run() {
     edges_.clear();
@@ -55,7 +57,67 @@ void Steiner::run() {
 }
 
 void Steiner::run_modified() {
+   edges_.clear();
+    
+    std::vector<int> terminal_ids;
+    for (const auto& [id, p] : points_) {
+        if (p.type_ == BASIC) {
+            terminal_ids.push_back(id);
+        }
+    }
+    
+    if (terminal_ids.size() < 2) {
+        return;  
+    }
+    
+    while (true) {
+        auto [current_cost, current_edges] = compute_mst(terminal_ids);
+        
+        auto candidates = generate_candidates(terminal_ids);
 
+        BS::thread_pool pool;  
+        std::vector<std::future<int>> gain_futures;
+        gain_futures.reserve(candidates.size());
+
+        for (size_t i = 0; i < candidates.size(); ++i) {
+            gain_futures.push_back(
+                pool.submit_task([this, &terminal_ids, &candidates, i]() -> int {
+                    return compute_gain(terminal_ids, candidates[i]);
+                })
+            );
+        }
+
+        int best_gain = 0;
+        Point best_candidate;
+        for (size_t i = 0; i < candidates.size(); ++i) {
+            int gain = gain_futures[i].get(); 
+            if (gain > best_gain) {
+                best_gain = gain;
+                best_candidate = candidates[i];
+            }
+        }
+        
+        if (best_gain <= 0) {
+            break;
+        }
+        
+        int new_id = next_point_id_++;
+        best_candidate.id_ = new_id;
+        best_candidate.name_ = "steiner_" + std::to_string(new_id);
+        points_[new_id] = best_candidate;
+        terminal_ids.push_back(new_id);
+    }
+    
+    auto [final_cost, final_edges] = compute_mst(terminal_ids);
+
+    std::cout << "Final Cost: " << final_cost << '\n';
+    
+    for (const auto& e : final_edges) {
+        int edge_id = next_edge_id_++;
+        edges_[edge_id] = Edge{edge_id, e.first, e.second};
+        points_[e.first].edges_ids_.push_back(edge_id);
+        points_[e.second].edges_ids_.push_back(edge_id);
+    }
 }
 
 void Steiner::add_point(const std::string& name, int id, int x, int y, PointType type) {
